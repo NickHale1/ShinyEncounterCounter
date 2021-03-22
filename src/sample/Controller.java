@@ -36,6 +36,7 @@ public class Controller implements Initializable {
 
     /**
      * Increment the number of encounters for each attempt at a shiny
+     *
      */
     public void addAttempt() { UpdateCurrentNumEncounters(); }
 
