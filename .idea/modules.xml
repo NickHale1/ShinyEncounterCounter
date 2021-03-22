@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ShinyEnocounterCounter.iml" filepath="$PROJECT_DIR$/ShinyEnocounterCounter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ShinyEncounterCounter.iml" filepath="$PROJECT_DIR$/ShinyEncounterCounter.iml" />
     </modules>
   </component>
 </project>
