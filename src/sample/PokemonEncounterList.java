@@ -16,7 +16,7 @@ public class PokemonEncounterList {
     static String activeHuntSaveFile = "./src/sample/ActiveShinyHunts";
 
     static PokemonEncounter[] PokemonHunts = new PokemonEncounter[1000];
-    static int pokemonHuntsLength = 0;
+    static int PokemonHuntsSize = 0;
 
     /**
      * Access save file to downlaod all the active pokemon hunts into the array which will be accessed later
@@ -37,8 +37,8 @@ public class PokemonEncounterList {
 
                     PokemonEncounter newPokemon =
                             new PokemonEncounter(InfoParameters[0], Integer.valueOf(InfoParameters[1]), Boolean.parseBoolean(InfoParameters[2]));
-                    PokemonHunts[pokemonHuntsLength] = newPokemon;
-                    pokemonHuntsLength++;
+                    PokemonHunts[PokemonHuntsSize] = newPokemon;
+                    PokemonHuntsSize++;
                 }
             }
             return PokemonHunts[0];
@@ -62,7 +62,7 @@ public class PokemonEncounterList {
         try {
             fileWriter = new PrintWriter(activeHunts);
             fileWriter.write("");
-            for(int i = 0; i < pokemonHuntsLength; i ++) {
+            for(int i = 0; i < PokemonHuntsSize; i ++) {
                 //fileWriter.write("POkemonDF");
                 fileWriter.write(PokemonHunts[i].toString());
             }
@@ -111,7 +111,7 @@ public class PokemonEncounterList {
      * @return a string array of the names of active pokemon hunts
      */
     public static String[] getPokemonEncounters() {
-        String[] pokemonHuntNames = new String[pokemonHuntsLength];
+        String[] pokemonHuntNames = new String[PokemonHuntsSize];
         for(int i =0; i< pokemonHuntNames.length; i++){
             pokemonHuntNames[i] = PokemonHunts[i].getPokemonName();
         }
@@ -122,6 +122,17 @@ public class PokemonEncounterList {
 
     }
 
+    void removeHunt(PokemonEncounter pe) {
+        for(int i = 0; i < PokemonHuntsSize; i++){
+            //if index i is the one you are trying to remove
+            if(PokemonHunts[i].equals(pe)){
+                //move the last entry up to the current entry
+                PokemonHunts[i] = PokemonHunts[PokemonHuntsSize -1];
+                PokemonHunts[PokemonHuntsSize-1] = null;
+            }
+        }
+    }
+
 
     public static void main(String[] args) {
 //C:\Users\halen\IdeaProjects\ShinyEnocounterCounter\src\sample\ActiveShinyHunts
@@ -130,7 +141,7 @@ public class PokemonEncounterList {
         System.out.println(directt.getAbsoluteFile());
 
         LoadPokemonList();
-        for(int i = 0; i < pokemonHuntsLength; i++){
+        for(int i = 0; i < PokemonHuntsSize; i++){
             System.out.print(PokemonHunts[i].toString());
         }
         SavePokemonList();

@@ -1,16 +1,14 @@
 package sample;
 
 
-import javafx.application.Application;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -21,18 +19,17 @@ import java.util.ResourceBundle;
 //TODO Create a settings tab that can modify bits of the UI to customize to the user
 //TODO Create the ability to load an image or gif when you open a new hunt
 public class Controller implements Initializable {
-    Scene ShinyEncounterTracker;
     static PokemonEncounter currentPokemonHunt;
-    @FXML
-    Text CurrentPokemonName;
-    @FXML
-    Text CurrentNumEncounters;
-    @FXML
-    GridPane myWindow22;
-    @FXML
-    Button testBtn;
-    @FXML
-    ComboBox huntSelector;
+
+    //FXML attributes being imported from the GUI
+    @FXML Text CurrentPokemonName;
+    @FXML Text CurrentNumEncounters;
+    @FXML GridPane myWindow22;
+    @FXML Button foundShiny;
+    @FXML ComboBox huntSelector;
+    @FXML Button newHunt;
+    @FXML Button removeHunt;
+    @FXML Button resetHunt;
 
     /**
      * Increment the number of encounters for each attempt at a shiny
@@ -45,17 +42,49 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         currentPokemonHunt = PokemonEncounterList.LoadPokemonList();
         UpdatePokemonStats();
+        //TODO need to make it that what the first pokemon is loaded in that the found shiny button is
+        // correctly enabled or disabled
+        updateDropDownList();
 
-        huntSelector.getItems().addAll(PokemonEncounterList.getPokemonEncounters());
+        //huntSelector.getItems().addAll(PokemonEncounterList.getPokemonEncounters());
         huntSelector.setValue(PokemonEncounterList.getPokemonEncounterById(0).getPokemonName());
-
+        /**
+         * Set actions for when you select a new hunt from the drop down list
+         */
         huntSelector.setOnAction(PokemonSelected -> {
             String SelectedItem = (String) huntSelector.getSelectionModel().getSelectedItem();
             System.out.println(SelectedItem);
             currentPokemonHunt = PokemonEncounterList.getPokemonEncounter(SelectedItem);
             UpdatePokemonStats();
+            foundShiny.setDisable(currentPokemonHunt.isShinyFound());
         });
 
+        /**
+         * Set actions for the found shiny button
+         */
+        foundShiny.setOnAction(FoundAShiny -> {
+            currentPokemonHunt.foundTheShiny();
+            foundShiny.setDisable(true);
+
+        });
+        /**
+         * Set actions for the New Hunt button
+         */
+        newHunt.setOnAction(CreateNewHunt ->{
+            //TODO create new hunt information
+        });
+        /**
+         * Set actions for the remove hunt button
+         */
+        removeHunt.setOnAction(RemoveHunt -> {
+            //TODO Remove hunt code
+        });
+
+    }
+
+    private void updateDropDownList() {
+        huntSelector.getItems().clear();
+        huntSelector.getItems().addAll(PokemonEncounterList.getPokemonEncounters());
     }
 
 
