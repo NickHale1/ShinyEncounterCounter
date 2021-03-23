@@ -23,10 +23,10 @@ import java.util.ResourceBundle;
 //TODO Create a settings tab that can modify bits of the UI to customize to the user
 //TODO Create the ability to load an image or gif when you open a new hunt
 public class Controller implements Initializable {
-    static PokemonEncounter currentPokemonHunt;
+    private static PokemonEncounter currentPokemonHunt;
 
     //Defualt key for increment encounter
-    static KeyCode incrementEncounter = KeyCode.A;
+    private static KeyCode incrementEncounter = KeyCode.A;
 
     //FXML attributes being imported from the GUI
     @FXML Text CurrentPokemonName;

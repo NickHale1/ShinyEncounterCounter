@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 /**
+ * Static Class that contains an array of pokemon encounters
  * This class is responsible for maintaining the user's save data
  * Two main functions, LoadPokemonList() and SavePokemonList()
  * LoadPokemonList is called at the program launch to compile all saved pokemon hunts into an array (maximum of 20 saved pokemon) rn you need manual delete
@@ -15,11 +16,15 @@ public class PokemonEncounterList {
 
     static String activeHuntSaveFile = "./src/sample/ActiveShinyHunts";
 
-    static PokemonEncounter[] PokemonHunts = new PokemonEncounter[1000];
+    static PokemonEncounter[] PokemonHunts = new PokemonEncounter[20];
     static int PokemonHuntsSize = 0;
+
 
     public static int getPokemonHuntSize() {
         return PokemonHuntsSize;
+    }
+    public static int getMaxSize() {
+        return PokemonHunts.length;
     }
 
     /**

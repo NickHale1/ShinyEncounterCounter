@@ -26,7 +26,7 @@ public class Main extends Application{
         primaryStage.setScene(ShinyEncounterTracker);
 
         /**
-         * Overrid method for closing the window so I can save the hunts that have been changed.
+         * Override method for closing the window so I can save the hunts that have been changed.
          */
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
