@@ -18,6 +18,10 @@ public class PokemonEncounterList {
     static PokemonEncounter[] PokemonHunts = new PokemonEncounter[1000];
     static int PokemonHuntsSize = 0;
 
+    public static int getPokemonHuntSize() {
+        return PokemonHuntsSize;
+    }
+
     /**
      * Access save file to downlaod all the active pokemon hunts into the array which will be accessed later
      */
@@ -122,13 +126,14 @@ public class PokemonEncounterList {
 
     }
 
-    void removeHunt(PokemonEncounter pe) {
+    static void removeHunt(PokemonEncounter pe) {
         for(int i = 0; i < PokemonHuntsSize; i++){
             //if index i is the one you are trying to remove
             if(PokemonHunts[i].equals(pe)){
                 //move the last entry up to the current entry
                 PokemonHunts[i] = PokemonHunts[PokemonHuntsSize -1];
                 PokemonHunts[PokemonHuntsSize-1] = null;
+                PokemonHuntsSize--;
             }
         }
     }

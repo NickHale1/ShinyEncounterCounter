@@ -44,6 +44,7 @@ public class Controller implements Initializable {
         UpdatePokemonStats();
         //TODO need to make it that what the first pokemon is loaded in that the found shiny button is
         // correctly enabled or disabled
+        foundShiny.setDisable(currentPokemonHunt.isShinyFound());
         updateDropDownList();
 
         //huntSelector.getItems().addAll(PokemonEncounterList.getPokemonEncounters());
@@ -54,6 +55,10 @@ public class Controller implements Initializable {
         huntSelector.setOnAction(PokemonSelected -> {
             String SelectedItem = (String) huntSelector.getSelectionModel().getSelectedItem();
             System.out.println(SelectedItem);
+            if(SelectedItem== null){
+                SelectedItem = PokemonEncounterList.getPokemonEncounterById(0).getPokemonName();
+                huntSelector.setValue(SelectedItem);
+            }
             currentPokemonHunt = PokemonEncounterList.getPokemonEncounter(SelectedItem);
             UpdatePokemonStats();
             foundShiny.setDisable(currentPokemonHunt.isShinyFound());
@@ -67,17 +72,28 @@ public class Controller implements Initializable {
             foundShiny.setDisable(true);
 
         });
+
         /**
          * Set actions for the New Hunt button
          */
         newHunt.setOnAction(CreateNewHunt ->{
             //TODO create new hunt information
         });
+
         /**
          * Set actions for the remove hunt button
          */
         removeHunt.setOnAction(RemoveHunt -> {
-            //TODO Remove hunt code
+            // will not remove if there is not more than one thing in the list
+         if(PokemonEncounterList.getPokemonHuntSize() > 1) {
+             PokemonEncounterList.removeHunt(currentPokemonHunt);
+             currentPokemonHunt = PokemonEncounterList.getPokemonEncounterById(0);
+             huntSelector.setValue(PokemonEncounterList.getPokemonEncounterById(0).getPokemonName());
+         }
+         if(PokemonEncounterList.getPokemonHuntSize() <= 1){
+             removeHunt.setDisable(true);
+         }
+         updateDropDownList();
         });
 
     }
