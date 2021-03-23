@@ -13,8 +13,10 @@
    <columnConstraints>
       <ColumnConstraints />
       <ColumnConstraints />
+      <ColumnConstraints />
    </columnConstraints>
    <rowConstraints>
+      <RowConstraints />
       <RowConstraints />
       <RowConstraints />
       <RowConstraints />
@@ -29,5 +31,7 @@
       <Button fx:id="foundShiny" mnemonicParsing="false" text="FOUNDIT" GridPane.rowIndex="3" />
       <ComboBox fx:id="huntSelector" prefWidth="150.0" GridPane.rowIndex="4" />
       <Button fx:id="newHunt" mnemonicParsing="false" prefHeight="25.0" prefWidth="109.0" text="NEW HUNT" GridPane.rowIndex="1" />
+      <Button fx:id="removeHunt" mnemonicParsing="false" text="Remove" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+      <Button fx:id="resetHunt" mnemonicParsing="false" text="Reset" GridPane.columnIndex="2" GridPane.rowIndex="3" />
    </children>
 </GridPane>
