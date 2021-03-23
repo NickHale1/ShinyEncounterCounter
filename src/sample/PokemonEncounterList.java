@@ -122,8 +122,10 @@ public class PokemonEncounterList {
         return pokemonHuntNames;
     }
 
-    public void addPokemonEncounter(){
-
+    public static void addPokemonEncounter(String newName){
+        PokemonEncounter temp = new PokemonEncounter(newName);
+        PokemonHunts[PokemonHuntsSize] = temp;
+        PokemonHuntsSize++;
     }
 
     static void removeHunt(PokemonEncounter pe) {

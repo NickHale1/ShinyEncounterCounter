@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -22,6 +24,9 @@ import java.util.ResourceBundle;
 //TODO Create the ability to load an image or gif when you open a new hunt
 public class Controller implements Initializable {
     static PokemonEncounter currentPokemonHunt;
+
+    //Defualt key for increment encounter
+    static KeyCode incrementEncounter = KeyCode.A;
 
     //FXML attributes being imported from the GUI
     @FXML Text CurrentPokemonName;
@@ -38,7 +43,19 @@ public class Controller implements Initializable {
      * Increment the number of encounters for each attempt at a shiny
      *
      */
-    public void addAttempt() { UpdateCurrentNumEncounters(); }
+    public void addAttempt(KeyEvent event)
+    {
+        // if you are not typing in the text field
+        if(event.getTarget() != newHuntName) {
+            //and if you are hitting the correct key
+            if (event.getCode() != incrementEncounter) {
+
+                UpdateCurrentNumEncounters();
+            }
+        }
+
+
+    }
 
 
     @Override
@@ -98,12 +115,20 @@ public class Controller implements Initializable {
 
                 newHunt.setText("Start");
             }else {
-                //disable text field
-                newHuntName.setDisable(true);
-                newHuntName.setVisible(false);
+                //if something is typed in the box then create the new encounter
+                if(newHuntName.getText() != "" || newHuntName.getText() != null) {
+                    PokemonEncounterList.addPokemonEncounter(newHuntName.getText());
+                    //disable text field
+                    newHuntName.setDisable(true);
+                    newHuntName.setVisible(false);
+                    newHunt.setText("NEW HUNT");
+                    updateDropDownList(PokemonEncounterList.getPokemonHuntSize());
+                    if(PokemonEncounterList.getPokemonHuntSize() > 1) {
+                        removeHunt.setDisable(false);
+                    }
+                }
 
             }
-            //TODO create new hunt information
         });
 
         /**
@@ -119,9 +144,13 @@ public class Controller implements Initializable {
          if(PokemonEncounterList.getPokemonHuntSize() <= 1){
              removeHunt.setDisable(true);
          }
-         updateDropDownList();
+         updateDropDownList(PokemonEncounterList.getPokemonHuntSize());
         });
 
+    }
+    private void updateDropDownList(int i) {
+        updateDropDownList();
+        huntSelector.setValue(PokemonEncounterList.getPokemonEncounterById(i-1).getPokemonName());
     }
 
     private void updateDropDownList() {

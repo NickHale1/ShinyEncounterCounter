@@ -42,8 +42,10 @@ public class Main extends Application{
          * A key listener that will update please :)
          */
         ShinyEncounterTracker.setOnKeyReleased(event -> {
+
+
             System.out.println("Yo");
-            mycontroller.addAttempt();
+            mycontroller.addAttempt(event);
         });
 
         primaryStage.show();
