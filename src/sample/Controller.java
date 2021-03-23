@@ -7,7 +7,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -30,6 +32,7 @@ public class Controller implements Initializable {
     @FXML Button newHunt;
     @FXML Button removeHunt;
     @FXML Button resetHunt;
+    @FXML TextField newHuntName;
 
     /**
      * Increment the number of encounters for each attempt at a shiny
@@ -74,9 +77,32 @@ public class Controller implements Initializable {
         });
 
         /**
+         * Associated FXML fields ---- newHunt, newHuntName
          * Set actions for the New Hunt button
          */
         newHunt.setOnAction(CreateNewHunt ->{
+            /**
+             * First check to see what the text on the button says -- Two states
+             * if Button says new then that means the text field isnt visible or active
+             *      set the text field to visible/active
+             *      change text on button to start
+             * if Button says start then that means the text field is open and ready for input
+             *      need to make sure that there is something in text field so we dont get null pointer
+             *      if something is typed in then call the addhunt function in PokemonEncounterList
+             */
+
+            if(newHunt.getText().equals("NEW HUNT")){
+                //activate text field
+                newHuntName.setDisable(false);
+                newHuntName.setVisible(true);
+
+                newHunt.setText("Start");
+            }else {
+                //disable text field
+                newHuntName.setDisable(true);
+                newHuntName.setVisible(false);
+
+            }
             //TODO create new hunt information
         });
 
@@ -109,6 +135,12 @@ public class Controller implements Initializable {
      */
     public  void UpdatePokemonStats() {
         CurrentPokemonName.setText(currentPokemonHunt.getPokemonName());
+        if(currentPokemonHunt.isShinyFound()){
+            CurrentPokemonName.setFill(Color.GOLD);
+        }
+        else{
+            CurrentPokemonName.setFill(Color.BLACK);
+        }
         CurrentNumEncounters.setText(String.valueOf(currentPokemonHunt.getNumEncounters()));
 
     }
