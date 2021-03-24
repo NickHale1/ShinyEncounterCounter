@@ -1,5 +1,7 @@
 package sample;
 
+import javafx.scene.input.KeyCode;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -13,8 +15,9 @@ import java.util.Scanner;
  * SavePokemonList is called at the program close to clear out the previous information and rewrite the correct info
  */
 public class PokemonEncounterList {
+    //"src/sample/ActiveShinyHunts"
 
-    static String activeHuntSaveFile = "./src/sample/ActiveShinyHunts";
+    static String activeHuntSaveFile = "./ActiveHunts.txt";
 
     static PokemonEncounter[] PokemonHunts = new PokemonEncounter[20];
     static int PokemonHuntsSize = 0;
@@ -149,6 +152,7 @@ public class PokemonEncounterList {
     public static void main(String[] args) {
 //C:\Users\halen\IdeaProjects\ShinyEnocounterCounter\src\sample\ActiveShinyHunts
         //sample/ActiveShinyHunts
+        /*
         File directt = new File(".//src/sample/ActiveShinyHunts");
         System.out.println(directt.getAbsoluteFile());
 
@@ -157,6 +161,11 @@ public class PokemonEncounterList {
             System.out.print(PokemonHunts[i].toString());
         }
         SavePokemonList();
+
+         */
+
+        String test = KeyCode.A.toString();
+        System.out.println(test);
 
 
 

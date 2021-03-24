@@ -48,7 +48,7 @@ public class Controller implements Initializable {
         // if you are not typing in the text field
         if(event.getTarget() != newHuntName) {
             //and if you are hitting the correct key
-            if (event.getCode() != incrementEncounter) {
+            if (event.getCode() == incrementEncounter) {
 
                 UpdateCurrentNumEncounters();
             }
