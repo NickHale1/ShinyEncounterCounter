@@ -9,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-//TODO Create a way to be able to start a new hunt with a new pokemon
+
 //TODO Maybe make a timer function?
 public class Main extends Application{
 
@@ -32,7 +32,7 @@ public class Main extends Application{
             @Override
             public void handle(WindowEvent e) {
                 PokemonEncounterList.SavePokemonList();
-                //TODO Set some text on screen to say saving your hunts please dont force close :(
+
                 System.out.println("Shutting down :(");
                 System.exit(0);
             }

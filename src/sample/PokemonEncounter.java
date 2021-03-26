@@ -102,13 +102,18 @@ public class PokemonEncounter
      * Formats the PokemonEncounter information into a string that can be loaded at a sepeate time.
      * @return Properly formatted string for saving
      */
-    @Override
-    public String toString()
+
+    public String toStringSave()
     {
         return String.format("%s    %d  %b%n", this.pokemonName, this.numEncounters, this.shinyFound);
     }
 
-//TODO KNOWN BUG:
+    @Override
+    public String toString() {
+        return this.pokemonName;
+    }
+
+    //TODO KNOWN BUG:
 /**
  * if you have 2 hunts of the same pokemon it will only ever display the first
  * one in the list since the way that it is searched is by going

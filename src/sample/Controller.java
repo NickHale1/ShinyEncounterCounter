@@ -3,32 +3,48 @@ package sample;
 
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.web.WebView;
+import javafx.stage.Stage;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 
-//TODO Create new encounter button that will create a new encounter and set the current hunt to the new one
+
 //TODO Fix the UI and make it more user friendly
 //TODO Create options to change the background color -- to chroma key it out on streamlabs
 //TODO Create a settings tab that can modify bits of the UI to customize to the user
 //TODO Create the ability to load an image or gif when you open a new hunt
-public class Controller implements Initializable {
+public class Controller implements Initializable{
     private static PokemonEncounter currentPokemonHunt;
 
     //Defualt key for increment encounter
     private static KeyCode incrementEncounter = KeyCode.A;
 
-    //FXML attributes being imported from the GUI
+    /**
+     * Method stub for if I need different controller class for multiple scenes
+     */
+    public static void UpdateIncrementCode() {
+
+    }
+
+    //FXML attributes being imported from the Main Panel
     @FXML Text CurrentPokemonName;
     @FXML Text CurrentNumEncounters;
     @FXML GridPane myWindow22;
@@ -38,6 +54,12 @@ public class Controller implements Initializable {
     @FXML Button removeHunt;
     @FXML Button resetHunt;
     @FXML TextField newHuntName;
+    @FXML Button OpenOptions;
+    @FXML ImageView shinyGif;
+    @FXML WebView shinyGif2;
+
+    //FXML Attributes for Options Panel
+    @FXML Button OptionIncrementEnccounter;
 
     /**
      * Increment the number of encounters for each attempt at a shiny
@@ -60,11 +82,17 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+            shinyGif.setImage(new Image("https://play.pokemonshowdown.com/sprites/dex/aegislash.png"));
+
         currentPokemonHunt = PokemonEncounterList.LoadPokemonList();
         UpdatePokemonStats();
         //TODO need to make it that what the first pokemon is loaded in that the found shiny button is
         // correctly enabled or disabled
         foundShiny.setDisable(currentPokemonHunt.isShinyFound());
+        if(PokemonEncounterList.getPokemonHuntSize() <=1) {
+            removeHunt.setDisable(true);
+        }
         updateDropDownList();
 
         //huntSelector.getItems().addAll(PokemonEncounterList.getPokemonEncounters());
@@ -73,12 +101,18 @@ public class Controller implements Initializable {
          * Set actions for when you select a new hunt from the drop down list
          */
         huntSelector.setOnAction(PokemonSelected -> {
-            String SelectedItem = (String) huntSelector.getSelectionModel().getSelectedItem();
+            PokemonEncounter SelectedPokemon = (PokemonEncounter) huntSelector.getSelectionModel().getSelectedItem();
+            String SelectedItem = SelectedPokemon.getPokemonName();
             System.out.println(SelectedItem);
             if(SelectedItem== null){
                 SelectedItem = PokemonEncounterList.getPokemonEncounterById(0).getPokemonName();
                 huntSelector.setValue(SelectedItem);
             }
+            // if I am giving it the list of all the entries then do I really need to deselect and reselect?
+            //not sure how it would work since I am using the copyOf function and if it is giving me a copy with
+            //with the actual objects or if it is copying each object
+            //if copying each object then it may be worth finding a work aroudn to the data structure to instead use
+            //a list that grows as needed rather than a size 20 array
             currentPokemonHunt = PokemonEncounterList.getPokemonEncounter(SelectedItem);
             UpdatePokemonStats();
             foundShiny.setDisable(currentPokemonHunt.isShinyFound());
@@ -147,7 +181,57 @@ public class Controller implements Initializable {
          updateDropDownList(PokemonEncounterList.getPokemonHuntSize());
         });
 
+        OpenOptions.setOnAction(openOptions -> {
+            /*
+            try {
+                Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("OptionsUI.fxml"));
+                Stage optionsWindow = new Stage();
+                optionsWindow.setTitle("Options");
+                optionsWindow.setScene(new Scene(root, 600, 600));
+                optionsWindow.show();
+            } catch (IOException e) {
+                System.out.println("idk lol");
+                System.exit(0);
+
+            }
+
+             */
+            System.out.println("Open Options");
+            try {
+                openOptionsWindow();
+            } catch (Exception e) {
+                System.out.println("No");
+                e.printStackTrace();
+            }
+
+        });
+/*
+        OptionIncrementEnccounter.setOnAction(event -> {
+            if(!OptionIncrementEnccounter.getText().equals("Waiting For Input")){
+                OptionIncrementEnccounter.setText("Waiting For Input");
+            }
+        });
+
+        OptionIncrementEnccounter.setOnKeyPressed(event -> {
+            if(OptionIncrementEnccounter.getText().equals("Waiting For Input")){
+                incrementEncounter = event.getCode();
+                OptionIncrementEnccounter.setText(event.getCode().toString());
+            }
+        });
+*/
     }
+
+    private void openOptionsWindow() throws Exception{
+        Stage optionsWindow = new Stage();
+        FXMLLoader loader = new FXMLLoader(this.getClass().getResource("ShinyEncounterCounterUI.fxml"));
+        Parent root = (Parent)loader.load();
+
+        optionsWindow.setTitle("OptionsWindow");
+        Scene optionsScene = new Scene(root, 600, 600);
+        optionsWindow.setScene(optionsScene);
+        optionsWindow.show();
+    }
+
     private void updateDropDownList(int i) {
         updateDropDownList();
         huntSelector.setValue(PokemonEncounterList.getPokemonEncounterById(i-1).getPokemonName());
@@ -155,6 +239,7 @@ public class Controller implements Initializable {
 
     private void updateDropDownList() {
         huntSelector.getItems().clear();
+       // huntSelector.getItems().addAll(PokemonEncounterList.getPokemonEncounters());
         huntSelector.getItems().addAll(PokemonEncounterList.getPokemonEncounters());
     }
 

@@ -5,6 +5,7 @@ import javafx.scene.input.KeyCode;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -76,7 +77,7 @@ public class PokemonEncounterList {
             fileWriter.write("");
             for(int i = 0; i < PokemonHuntsSize; i ++) {
                 //fileWriter.write("POkemonDF");
-                fileWriter.write(PokemonHunts[i].toString());
+                fileWriter.write(PokemonHunts[i].toStringSave());
             }
 
 
@@ -109,6 +110,15 @@ public class PokemonEncounterList {
         return new PokemonEncounter();
     }
 
+    public static PokemonEncounter getPokemonEncounter(PokemonEncounter pEncounter) {
+        for(PokemonEncounter pe : PokemonHunts) {
+            if(pe.equals(pEncounter)) {
+                return pe;
+            }
+        }
+        return null;
+    }
+
     public static PokemonEncounter getPokemonEncounterById(int index) {
         return PokemonHunts[index];
     }
@@ -122,12 +132,15 @@ public class PokemonEncounterList {
      *
      * @return a string array of the names of active pokemon hunts
      */
-    public static String[] getPokemonEncounters() {
+    public static String[] getPokemonEncountersNames() {
         String[] pokemonHuntNames = new String[PokemonHuntsSize];
         for(int i =0; i< pokemonHuntNames.length; i++){
             pokemonHuntNames[i] = PokemonHunts[i].getPokemonName();
         }
         return pokemonHuntNames;
+    }
+    public static PokemonEncounter[] getPokemonEncounters() {
+        return Arrays.copyOfRange(PokemonHunts,0,PokemonHuntsSize);
     }
 
     public static void addPokemonEncounter(String newName){
@@ -136,7 +149,12 @@ public class PokemonEncounterList {
         PokemonHuntsSize++;
     }
 
-    static void removeHunt(PokemonEncounter pe) {
+    /**
+     * Remove the hunt from the list
+     * @param pe the pokemon encounter you want to remove
+     * @return return 1 if item is successfully removed, 0 if not
+     */
+    static int removeHunt(PokemonEncounter pe) {
         for(int i = 0; i < PokemonHuntsSize; i++){
             //if index i is the one you are trying to remove
             if(PokemonHunts[i].equals(pe)){
@@ -144,8 +162,10 @@ public class PokemonEncounterList {
                 PokemonHunts[i] = PokemonHunts[PokemonHuntsSize -1];
                 PokemonHunts[PokemonHuntsSize-1] = null;
                 PokemonHuntsSize--;
+                return 1;
             }
         }
+        return 0;
     }
 
 
