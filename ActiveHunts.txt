@@ -1,2 +1,3 @@
-beans_2    0  false
-yo    0  false
+rookidee    53  true
+tapukoko    12  true
+grookey    0  false

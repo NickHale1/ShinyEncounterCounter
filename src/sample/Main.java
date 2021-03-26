@@ -22,7 +22,8 @@ public class Main extends Application{
         Parent root = loader.load();
         Controller mycontroller =  loader.getController();
         primaryStage.setTitle("Shiny Hunt Tracker");
-        ShinyEncounterTracker = new Scene(root, 300, 275);
+        ShinyEncounterTracker = new Scene(root, 480, 400);
+        primaryStage.setResizable(false);
         primaryStage.setScene(ShinyEncounterTracker);
 
         /**
