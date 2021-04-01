@@ -14,39 +14,47 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 
 
-//TODO Fix the UI and make it more user friendly
-//TODO Create options to change the background color -- to chroma key it out on streamlabs
+
+//TODO Show chance of getting a shiny at current encoutners
 //TODO Create a settings tab that can modify bits of the UI to customize to the user
-//TODO Create the ability to load an image or gif when you open a new hunt
+//TODO Create a button that can cycle through popular chroma key colors based on the colors of the shiny pokemon
 public class Controller implements Initializable{
     private static PokemonEncounter currentPokemonHunt;
 
     //Defualt key for increment encounter
     private static KeyCode incrementEncounter = KeyCode.A;
+    private static String GIFURL = "https://projectpokemon.org/images/shiny-sprite/";
+    private static Image pokemonGif;
+    private static boolean OPTIONSOPEN = false;
+
+    //Chroma Key Color Settings
+    private String CHROMAGREEN = "-fx-background-color:rgb(0,177,64);";
+    private String CHROMABLUE = "-fx-background-color:rgb(0,71,187);";
 
     /**
      * Method stub for if I need different controller class for multiple scenes
      */
-    public static void UpdateIncrementCode() {
+    public static void UpdateIncrementCode(KeyCode kc) {
+        incrementEncounter= kc;
 
     }
 
     //FXML attributes being imported from the Main Panel
     @FXML Text CurrentPokemonName;
     @FXML Text CurrentNumEncounters;
+    @FXML AnchorPane mainGUI;
     @FXML GridPane myWindow22;
     @FXML Button foundShiny;
     @FXML ComboBox huntSelector;
@@ -55,11 +63,12 @@ public class Controller implements Initializable{
     @FXML Button resetHunt;
     @FXML TextField newHuntName;
     @FXML Button OpenOptions;
-    @FXML ImageView shinyGif;
-    @FXML WebView shinyGif2;
+    @FXML ImageView shinyPokemonGif;
+    @FXML ImageView ShinyGif2;
+    @FXML Button bgColorButton;
 
-    //FXML Attributes for Options Panel
-    @FXML Button OptionIncrementEnccounter;
+
+
 
     /**
      * Increment the number of encounters for each attempt at a shiny
@@ -82,10 +91,25 @@ public class Controller implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        newHunt.setDefaultButton(false);
+        mainGUI.setStyle(CHROMAGREEN);
 
-            shinyGif.setImage(new Image("https://play.pokemonshowdown.com/sprites/dex/aegislash.png"));
+           // shinyGif.setImage(new Image("https://play.pokemonshowdown.com/sprites/dex/aegislash.png"));
+
+            /**
+             * Loading Gif From Download works :)
+             * Loading Gif from pokemon showdown site does not work
+             * If loaded from a file the Gif will dispaly successfully
+             */
+            //FileInputStream inputStream = new FileInputStream("C:\\Users\\nickh\\OneDrive\\Desktop\\alakazam.gif");
+
+            //ShinyGif2.setImage(new Image(inputStream));
+
+
+        //shinyPokemonGif.setImage(new Image("C:\\Users\\nickh\\OneDrive\\Desktop\\alakazam.gif"));
 
         currentPokemonHunt = PokemonEncounterList.LoadPokemonList();
+        //shinyPokemonGif.setImage(new Image(GIFURL + currentPokemonHunt.getPokemonName() + ".gif"));
         UpdatePokemonStats();
         //TODO need to make it that what the first pokemon is loaded in that the found shiny button is
         // correctly enabled or disabled
@@ -101,8 +125,8 @@ public class Controller implements Initializable{
          * Set actions for when you select a new hunt from the drop down list
          */
         huntSelector.setOnAction(PokemonSelected -> {
-            PokemonEncounter SelectedPokemon = (PokemonEncounter) huntSelector.getSelectionModel().getSelectedItem();
-            String SelectedItem = SelectedPokemon.getPokemonName();
+            String SelectedItem = (String) huntSelector.getSelectionModel().getSelectedItem();
+           // String SelectedItem = SelectedPokemon.getPokemonName();
             System.out.println(SelectedItem);
             if(SelectedItem== null){
                 SelectedItem = PokemonEncounterList.getPokemonEncounterById(0).getPokemonName();
@@ -218,12 +242,50 @@ public class Controller implements Initializable{
                 OptionIncrementEnccounter.setText(event.getCode().toString());
             }
         });
+
+        reset
 */
+        resetHunt.setOnAction(event -> {
+
+            if(!OPTIONSOPEN) {
+                resetHunt.getScene().getWindow().setHeight(469);
+                OPTIONSOPEN = true;
+            }
+            else {
+                resetHunt.getScene().getWindow().setHeight(285);
+                OPTIONSOPEN = false;
+            }
+
+
+        });
+
+        bgColorButton.setOnAction(event -> {
+
+            switch (bgColorButton.getText()){
+                case "Green":
+                {
+                    mainGUI.setStyle(null);
+                    mainGUI.setStyle(CHROMABLUE);
+
+                    bgColorButton.setText("Blue");
+                    System.out.println("Changing to blue!");
+
+                }
+                case "Blue":
+                {
+                    mainGUI.setStyle(CHROMAGREEN);
+                    bgColorButton.setText("Green");
+
+                }
+                default: mainGUI.setStyle(CHROMAGREEN);
+            }
+
+        });
     }
 
     private void openOptionsWindow() throws Exception{
         Stage optionsWindow = new Stage();
-        FXMLLoader loader = new FXMLLoader(this.getClass().getResource("ShinyEncounterCounterUI.fxml"));
+        FXMLLoader loader = new FXMLLoader(this.getClass().getResource("ShinyEncounterCounterUIOld.fxml"));
         Parent root = (Parent)loader.load();
 
         optionsWindow.setTitle("OptionsWindow");
@@ -240,7 +302,7 @@ public class Controller implements Initializable{
     private void updateDropDownList() {
         huntSelector.getItems().clear();
        // huntSelector.getItems().addAll(PokemonEncounterList.getPokemonEncounters());
-        huntSelector.getItems().addAll(PokemonEncounterList.getPokemonEncounters());
+        huntSelector.getItems().addAll(PokemonEncounterList.getPokemonEncountersNames());
     }
 
 
@@ -256,6 +318,9 @@ public class Controller implements Initializable{
             CurrentPokemonName.setFill(Color.BLACK);
         }
         CurrentNumEncounters.setText(String.valueOf(currentPokemonHunt.getNumEncounters()));
+        pokemonGif = null;
+        pokemonGif = new Image(GIFURL + currentPokemonHunt.getPokemonName() + ".gif");
+        shinyPokemonGif.setImage(pokemonGif);
 
     }
 
