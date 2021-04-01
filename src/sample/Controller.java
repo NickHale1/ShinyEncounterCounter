@@ -14,6 +14,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -25,7 +27,7 @@ import java.util.ResourceBundle;
 
 
 
-
+//TODO Show chance of getting a shiny at current encoutners
 //TODO Create a settings tab that can modify bits of the UI to customize to the user
 //TODO Create a button that can cycle through popular chroma key colors based on the colors of the shiny pokemon
 public class Controller implements Initializable{
@@ -35,17 +37,24 @@ public class Controller implements Initializable{
     private static KeyCode incrementEncounter = KeyCode.A;
     private static String GIFURL = "https://projectpokemon.org/images/shiny-sprite/";
     private static Image pokemonGif;
+    private static boolean OPTIONSOPEN = false;
+
+    //Chroma Key Color Settings
+    private String CHROMAGREEN = "-fx-background-color:rgb(0,177,64);";
+    private String CHROMABLUE = "-fx-background-color:rgb(0,71,187);";
 
     /**
      * Method stub for if I need different controller class for multiple scenes
      */
-    public static void UpdateIncrementCode() {
+    public static void UpdateIncrementCode(KeyCode kc) {
+        incrementEncounter= kc;
 
     }
 
     //FXML attributes being imported from the Main Panel
     @FXML Text CurrentPokemonName;
     @FXML Text CurrentNumEncounters;
+    @FXML AnchorPane mainGUI;
     @FXML GridPane myWindow22;
     @FXML Button foundShiny;
     @FXML ComboBox huntSelector;
@@ -56,10 +65,10 @@ public class Controller implements Initializable{
     @FXML Button OpenOptions;
     @FXML ImageView shinyPokemonGif;
     @FXML ImageView ShinyGif2;
+    @FXML Button bgColorButton;
 
 
-    //FXML Attributes for Options Panel
-    @FXML Button OptionIncrementEnccounter;
+
 
     /**
      * Increment the number of encounters for each attempt at a shiny
@@ -83,7 +92,7 @@ public class Controller implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         newHunt.setDefaultButton(false);
-
+        mainGUI.setStyle(CHROMAGREEN);
 
            // shinyGif.setImage(new Image("https://play.pokemonshowdown.com/sprites/dex/aegislash.png"));
 
@@ -233,7 +242,45 @@ public class Controller implements Initializable{
                 OptionIncrementEnccounter.setText(event.getCode().toString());
             }
         });
+
+        reset
 */
+        resetHunt.setOnAction(event -> {
+
+            if(!OPTIONSOPEN) {
+                resetHunt.getScene().getWindow().setHeight(469);
+                OPTIONSOPEN = true;
+            }
+            else {
+                resetHunt.getScene().getWindow().setHeight(285);
+                OPTIONSOPEN = false;
+            }
+
+
+        });
+
+        bgColorButton.setOnAction(event -> {
+
+            switch (bgColorButton.getText()){
+                case "Green":
+                {
+                    mainGUI.setStyle(null);
+                    mainGUI.setStyle(CHROMABLUE);
+
+                    bgColorButton.setText("Blue");
+                    System.out.println("Changing to blue!");
+
+                }
+                case "Blue":
+                {
+                    mainGUI.setStyle(CHROMAGREEN);
+                    bgColorButton.setText("Green");
+
+                }
+                default: mainGUI.setStyle(CHROMAGREEN);
+            }
+
+        });
     }
 
     private void openOptionsWindow() throws Exception{
